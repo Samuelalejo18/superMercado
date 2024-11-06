@@ -1,5 +1,6 @@
 package superMercado.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,8 +24,9 @@ public class Usuario implements Serializable {
     private String correo_usuario;
     private String password_usuario;
     private String telefono_usuario;
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
 
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({"usuario"})
     private List<Factura> Facturas = new ArrayList<Factura>();
 
 }

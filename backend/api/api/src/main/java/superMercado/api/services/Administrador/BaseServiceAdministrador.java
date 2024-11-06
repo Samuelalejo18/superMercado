@@ -1,4 +1,4 @@
-package superMercado.api.services;
+package superMercado.api.services.Administrador;
 
 import superMercado.api.entities.Administrador;
 

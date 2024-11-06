@@ -1,10 +1,13 @@
 package superMercado.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "lote")
@@ -19,5 +22,7 @@ public class Lote implements Serializable {
     private int  id_lote;
     private String categoria_lote;
     private Date fecha_vencimiento;
-
+    @OneToMany(mappedBy = "lote", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({"lote"})
+    private List<Producto>  productos = new ArrayList<Producto>();
 }
