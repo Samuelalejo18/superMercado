@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "administrador")
 @NoArgsConstructor
@@ -13,12 +16,15 @@ import java.io.Serializable;
 @ToString
 public class Administrador implements Serializable {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-  private int  id_administrador;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id_administrador;
+    private String nombre_administrador;
+    private String contacto_administrador;
+    private String numero_documento_admin;
+    private String correo_administrador;
+    private String password_administrador;
 
-  private String nombre_administrador;
-  private String contacto_administrador;
-  private String numero_documento_admin;
-  private String correo_administrador;
-  private String password_administrador;
+    @OneToMany(mappedBy = "administrador", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    private List<Sede> sedes = new ArrayList<Sede>();
 }
