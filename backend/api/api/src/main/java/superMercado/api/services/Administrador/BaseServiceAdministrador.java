@@ -1,5 +1,8 @@
 package superMercado.api.services.Administrador;
 
+import superMercado.api.Auth.AuthResponseAdmin;
+import superMercado.api.Auth.LoginRequestAdmin;
+import superMercado.api.Auth.RegisterRequestAdmin;
 import superMercado.api.entities.Administrador;
 
 import java.util.List;
@@ -15,5 +18,8 @@ public interface BaseServiceAdministrador{
     public Administrador update(int id, Administrador administrador) throws Exception;
     //Detele
     public boolean delete(int id) throws Exception;
+
+    public AuthResponseAdmin login(LoginRequestAdmin request) ;
+    public AuthResponseAdmin register(RegisterRequestAdmin request) ;
 }
 

@@ -32,4 +32,8 @@ public class Producto {
     @ManyToMany(mappedBy = "productos")
     @JsonIgnoreProperties({"usuario","sede","productos"})
     private List<Factura>  facturas= new ArrayList<Factura>();
+
+    @ManyToMany(mappedBy = "productosProveedor")
+   @JsonIgnoreProperties({"productosProveedor","sedes"})
+    private List<Proveedor> proveedores= new ArrayList<Proveedor>();
 }

@@ -27,11 +27,15 @@ public class Sede implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_administrador") // Nombre de la columna en la tabla 'sede' que actúa como clave foránea
 // Ignora la lista de "sedes" al serializar el Administrador en Sede
-    @JsonIgnoreProperties({"sedes"})
+    @JsonIgnoreProperties({"sedes","password_administrador"})
     private Administrador administrador;
 
     @OneToMany(mappedBy = "sede", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"sede"})
     private List<Factura> facturas = new ArrayList<Factura>();
+
+    @ManyToMany(mappedBy = "sedes")
+    @JsonIgnoreProperties({"productosProveedor","sedes"})
+    private List<Proveedor> proveedores= new ArrayList<Proveedor>();
 
 }

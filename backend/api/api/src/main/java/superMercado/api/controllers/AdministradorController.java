@@ -1,9 +1,13 @@
 package superMercado.api.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import superMercado.api.Auth.AuthResponseAdmin;
+import superMercado.api.Auth.LoginRequestAdmin;
+import superMercado.api.Auth.RegisterRequestAdmin;
 import superMercado.api.entities.Administrador;
 import superMercado.api.services.Administrador.AdministradorService;
 
@@ -11,9 +15,21 @@ import superMercado.api.services.Administrador.AdministradorService;
 //Dar permiso a los clientes
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "api/administrador")
+@RequiredArgsConstructor
 public class AdministradorController {
     @Autowired
-    private AdministradorService administradorService;
+    private final AdministradorService administradorService;
+
+    //endPoint login
+    @PostMapping("/loginAdmin")
+    public ResponseEntity<AuthResponseAdmin> loginAdmin(@RequestBody LoginRequestAdmin loginRequestAdmin) {
+        return ResponseEntity.ok(administradorService.login(loginRequestAdmin));
+    }
+
+    @PostMapping("/registerAdmin")
+    public ResponseEntity<AuthResponseAdmin> register(@RequestBody RegisterRequestAdmin registerRequestAdmin) {
+        return ResponseEntity.ok(administradorService.register(registerRequestAdmin));
+    }
 
     ///  ENDPOINT TRAER TODOS LOS ADMINISTRADORES
     @GetMapping("/getAdministradores")
@@ -51,8 +67,8 @@ public class AdministradorController {
     }
 
     //End point update-insert into
-@PutMapping("/{id}/actualizarAdministrador")
-    public ResponseEntity<?> actualizarAdministrador(@PathVariable int id,  @RequestBody Administrador administrador) {
+    @PutMapping("/{id}/actualizarAdministrador")
+    public ResponseEntity<?> actualizarAdministrador(@PathVariable int id, @RequestBody Administrador administrador) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(administradorService.update(id, administrador));
         } catch (Exception e) {

@@ -25,7 +25,7 @@ public class Factura implements Serializable {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_sede") // Clave foránea en Sede
-    @JsonIgnoreProperties({"facturas","administrador"})
+    @JsonIgnoreProperties({"facturas","administrador","proveedores"})
     private Sede sede;
 
 
@@ -39,6 +39,6 @@ public class Factura implements Serializable {
             joinColumns=@JoinColumn(name="factura_id"),
             inverseJoinColumns = @JoinColumn(name="producto_id")
     )
-    @JsonIgnoreProperties({"lote","facturas"})
+    @JsonIgnoreProperties({"lote","facturas","proveedores"})
     private List<Producto> productos = new ArrayList<Producto>();
 }

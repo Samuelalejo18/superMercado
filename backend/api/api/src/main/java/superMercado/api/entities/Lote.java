@@ -23,6 +23,6 @@ public class Lote implements Serializable {
     private String categoria_lote;
     private Date fecha_vencimiento;
     @OneToMany(mappedBy = "lote", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties({"lote"})
+    @JsonIgnoreProperties({"lote","facturas","productosProveedor"})
     private List<Producto>  productos = new ArrayList<Producto>();
 }

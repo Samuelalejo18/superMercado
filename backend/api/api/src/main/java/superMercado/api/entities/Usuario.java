@@ -26,7 +26,7 @@ public class Usuario implements Serializable {
     private String telefono_usuario;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties({"usuario"})
-    private List<Factura> Facturas = new ArrayList<Factura>();
+    @JsonIgnoreProperties({"usuario","proveedores"})
+    private List<Factura> facturas = new ArrayList<Factura>();
 
 }
