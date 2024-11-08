@@ -18,30 +18,30 @@ import io.jsonwebtoken.security.Keys;
 
 
 @Service
-@RequiredArgsConstructor
 public class JwtService {
 
-    private static final String SECRET_KEY = "supermercadosm20jc19caf192323232sdsdsdsdsdsdsdsdsd";
+    private static final String SECRET_KEY="586E3272357538782F413F4428472B4B6250655368566B597033733676397924";
 
-    public String getToken(UserDetails administradorUserDetails) {
-        return getToken(new HashMap<>(), administradorUserDetails);
+    public String getToken(UserDetails user) {
+        return getToken(new HashMap<>(), user);
     }
 
-    private String getToken(Map<String, Object> extraClaims,UserDetails administradorUserDetails) {
-        return Jwts.builder()
+    private String getToken(Map<String,Object> extraClaims, UserDetails user) {
+        return Jwts
+                .builder()
                 .setClaims(extraClaims)
-                .setSubject(administradorUserDetails.getUsername())
+                .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 *60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis()+1000*60*24))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
-
     }
 
     private Key getKey() {
-        byte[] keyBites = Decoders.BASE64.decode(SECRET_KEY);
-        return Keys.hmacShaKeyFor(keyBites);
+        byte[] keyBytes=Decoders.BASE64.decode(SECRET_KEY);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
+
     public String getUsernameFromToken(String token) {
         return getClaim(token, Claims::getSubject);
     }
@@ -76,6 +76,5 @@ public class JwtService {
     {
         return getExpiration(token).before(new Date());
     }
-
 
 }

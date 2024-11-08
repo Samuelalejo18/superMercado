@@ -14,20 +14,22 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import lombok.RequiredArgsConstructor;
 import superMercado.api.jwt.JwtAuthenticationFilter;
 
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    @Autowired
-    private final AuthenticationProvider authenticationProvider ;
-    @Autowired
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final AuthenticationProvider authProvider;
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
+    {
         return http
                 .csrf(csrf ->
-                        csrf.disable())
+                        csrf
+                                .disable())
                 .authorizeHttpRequests(authRequest ->
                         authRequest
                                 .requestMatchers("/api/**").permitAll()
@@ -36,10 +38,11 @@ public class SecurityConfig {
                 .sessionManagement(sessionManager->
                         sessionManager
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider)
+                .authenticationProvider(authProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
 
-    }
-}
 
+    }
+
+}

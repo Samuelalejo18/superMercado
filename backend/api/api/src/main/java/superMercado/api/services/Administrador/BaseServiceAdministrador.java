@@ -19,7 +19,7 @@ public interface BaseServiceAdministrador{
     //Detele
     public boolean delete(int id) throws Exception;
 
-    public AuthResponseAdmin login(LoginRequestAdmin request) ;
+    public AuthResponseAdmin login(LoginRequestAdmin request) throws Exception;
     public AuthResponseAdmin register(RegisterRequestAdmin request) ;
 }
 

@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import superMercado.api.Auth.AuthResponseAdmin;
@@ -20,14 +22,60 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AdministradorService implements BaseServiceAdministrador {
-    @Autowired
     private final AdministradorRepository administradorRepository;
-    @Autowired
     private final JwtService jwtService;
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     @Autowired
     private final AuthenticationManager authenticationManager;
+    @Autowired
+    private final AdministradorDAO administradorDAO;
+
+    public AuthResponseAdmin login(LoginRequestAdmin request) throws Exception {
+        try {
+            Administrador administrador = new Administrador(request.getId());
+            boolean encontrado = administradorDAO.findById(administrador);
+            if (encontrado) {
+                System.out.println("Cliente encontrado " + administrador.getUsername());
+            } else {
+                System.out.println("Cliente no encontrado " + administrador.toString());
+            }
+
+           //authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+            String token = jwtService.getToken(administrador);
+            return AuthResponseAdmin.builder()
+                    .token(token)
+                    .administrador(administrador).build();
+        } catch (Exception e) {
+
+            throw new Exception(e.getMessage());
+
+        }
+
+
+    }
+
+
+    @Override
+    public AuthResponseAdmin register(RegisterRequestAdmin request) {
+        Administrador administrador = Administrador.builder()
+                .username(request.getUsername())
+                .nombre_administrador(request.getNombre_administrador())
+                .contacto_administrador(request.getContacto_administrador())
+                .numero_documento_admin(request.getNumero_documento_admin())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))  // Asegúrate de que esto se esté haciendo correctamente
+                .build();
+
+        try {
+            create(administrador);
+            return AuthResponseAdmin.builder()
+                    .token(jwtService.getToken(administrador))
+                    .build();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
 // GET-SELECT
@@ -61,6 +109,7 @@ public class AdministradorService implements BaseServiceAdministrador {
         try {
             //SELECT * FROM railway.administrador where id_administrador= "?"
             Administrador administrador = administradorRepository.findById(id).orElse(null);
+            System.out.println(administrador.getId_administrador()+" "+ administrador.getPassword());
             return administrador;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -99,41 +148,4 @@ public class AdministradorService implements BaseServiceAdministrador {
         return false;
     }
 
-    public AuthResponseAdmin login(LoginRequestAdmin request) {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-            Administrador administrador = administradorRepository.findByUsername(request.getUsername())
-                    .orElseThrow();
-
-            return AuthResponseAdmin.builder()
-                    .token(jwtService.getToken(administrador))
-                    .build();
-
-        } catch (BadCredentialsException e) {
-            throw new RuntimeException("Credenciales inválidas: " + e.getMessage());
-        } catch (Exception e) {
-            throw new RuntimeException("Error en autenticación: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public AuthResponseAdmin register(RegisterRequestAdmin request) {
-        Administrador administrador = Administrador.builder()
-                .username(request.getUsername())
-                .nombre_administrador(request.getNombre_administrador())
-                .contacto_administrador(request.getContacto_administrador())
-                .numero_documento_admin(request.getNumero_documento_admin())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))  // Asegúrate de que esto se esté haciendo correctamente
-                .build();
-
-        try {
-            create(administrador);
-            return AuthResponseAdmin.builder()
-                    .token(jwtService.getToken(administrador))
-                    .build();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

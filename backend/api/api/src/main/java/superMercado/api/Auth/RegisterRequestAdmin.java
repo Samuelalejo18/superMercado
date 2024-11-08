@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequestAdmin {
-    private String username;
-    private String nombre_administrador;
-    private String contacto_administrador;
-    private String numero_documento_admin;
-    private String email;
-    private String password;
+    String username;
+    String nombre_administrador;
+    String contacto_administrador;
+    String numero_documento_admin;
+    String email;
+    String password;
 }

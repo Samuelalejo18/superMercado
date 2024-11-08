@@ -21,14 +21,23 @@ public class AdministradorController {
     private final AdministradorService administradorService;
 
     //endPoint login
-    @PostMapping("/loginAdmin")
-    public ResponseEntity<AuthResponseAdmin> loginAdmin(@RequestBody LoginRequestAdmin loginRequestAdmin) {
-        return ResponseEntity.ok(administradorService.login(loginRequestAdmin));
+    @PostMapping(value = "/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequestAdmin request)
+    {
+        try {
+            Administrador administrador= administradorService.login(request).getAdministrador();
+            System.out.printf(administrador.getPassword());
+            return ResponseEntity.status(HttpStatus.OK).body(administradorService.login(request));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error.Porfavor Intente mas tarde.\"}");
+        }
+
     }
 
-    @PostMapping("/registerAdmin")
-    public ResponseEntity<AuthResponseAdmin> register(@RequestBody RegisterRequestAdmin registerRequestAdmin) {
-        return ResponseEntity.ok(administradorService.register(registerRequestAdmin));
+    @PostMapping(value = "/register")
+    public ResponseEntity<AuthResponseAdmin> register(@RequestBody RegisterRequestAdmin request)
+    {
+        return ResponseEntity.ok(administradorService.register(request));
     }
 
     ///  ENDPOINT TRAER TODOS LOS ADMINISTRADORES
