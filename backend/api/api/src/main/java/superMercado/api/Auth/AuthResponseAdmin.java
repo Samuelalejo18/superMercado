@@ -12,6 +12,5 @@ import superMercado.api.entities.Administrador;
 @AllArgsConstructor
 public class AuthResponseAdmin {
  String token;
- Administrador administrador;
 
 }
