@@ -28,30 +28,14 @@ public class AdministradorService implements BaseServiceAdministrador {
     private final PasswordEncoder passwordEncoder;
     @Autowired
     private final AuthenticationManager authenticationManager;
-    @Autowired
-    private final AdministradorDAO administradorDAO;
 
-    public AuthResponseAdmin login(LoginRequestAdmin request) throws Exception {
-        try {
-            Administrador administrador = new Administrador(request.getId());
-            boolean encontrado = administradorDAO.findById(administrador);
-            if (encontrado) {
-                System.out.println("Cliente encontrado " + administrador.getUsername());
-            } else {
-                System.out.println("Cliente no encontrado " + administrador.toString());
-            }
-
-           //authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-            String token = jwtService.getToken(administrador);
-            return AuthResponseAdmin.builder()
-                    .token(token)
-                    .administrador(administrador).build();
-        } catch (Exception e) {
-
-            throw new Exception(e.getMessage());
-
-        }
-
+    public AuthResponseAdmin login(LoginRequestAdmin request) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        UserDetails user=administradorRepository.findByUsername(request.getUsername()).orElseThrow();
+        String token=jwtService.getToken(user);
+        return AuthResponseAdmin.builder()
+                .token(token)
+                .build();
 
     }
 

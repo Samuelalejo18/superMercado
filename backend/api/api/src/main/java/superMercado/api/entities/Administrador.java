@@ -59,13 +59,14 @@ public class Administrador implements UserDetails, Serializable {
     @JsonIgnore
     @Override
     public String getPassword() {
-        return "";
+
+        return password;
     }
 
     @JsonIgnore
     @Override
     public String getUsername() {
-        return "";
+        return username;
     }
 
     @JsonIgnore

@@ -22,21 +22,15 @@ public class AdministradorController {
 
     //endPoint login
     @PostMapping(value = "/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestAdmin request)
-    {
-        try {
-            Administrador administrador= administradorService.login(request).getAdministrador();
-            System.out.printf(administrador.getPassword());
-            return ResponseEntity.status(HttpStatus.OK).body(administradorService.login(request));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error.Porfavor Intente mas tarde.\"}");
-        }
+    public ResponseEntity<?> login(@RequestBody LoginRequestAdmin request) {
+
+        return ResponseEntity.ok(administradorService.login(request));
+
 
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<AuthResponseAdmin> register(@RequestBody RegisterRequestAdmin request)
-    {
+    public ResponseEntity<AuthResponseAdmin> register(@RequestBody RegisterRequestAdmin request) {
         return ResponseEntity.ok(administradorService.register(request));
     }
 
