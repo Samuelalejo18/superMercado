@@ -2,6 +2,7 @@ package superMercado.api.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,15 +24,26 @@ public class AdministradorController {
     //endPoint login
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        try {
+            return ResponseEntity.ok(administradorService.login(request));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
-        return ResponseEntity.ok(administradorService.login(request));
 
 
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<AuthResponseAdmin> register(@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(administradorService.register(request));
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+        try {
+            return ResponseEntity.ok(administradorService.register(request));
+        } catch (DataIntegrityViolationException e) {
+            // Devuelve el error específico en el cuerpo de la respuesta
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     ///  ENDPOINT TRAER TODOS LOS ADMINISTRADORES
