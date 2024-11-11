@@ -1,9 +1,10 @@
-package superMercado.api.services.Administrador;
+package superMercado.api.services.PersonaService;
 
-import superMercado.api.Auth.AuthResponseAdmin;
+import superMercado.api.Auth.AuthResponse;
 import superMercado.api.Auth.LoginRequest;
 import superMercado.api.Auth.RegisterRequest;
 import superMercado.api.entities.Administrador;
+import superMercado.api.excepciones.InvalidCredentialsException;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface BaseServiceAdministrador{
     //Detele
     public boolean delete(int id) throws Exception;
 
-    public AuthResponseAdmin login(LoginRequest request) throws Exception;
-    public AuthResponseAdmin register(RegisterRequest request) ;
+    public AuthResponse login(LoginRequest request) throws Exception, InvalidCredentialsException;
+    public AuthResponse register(RegisterRequest request) ;
 }
 

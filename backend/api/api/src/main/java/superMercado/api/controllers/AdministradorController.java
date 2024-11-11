@@ -6,11 +6,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import superMercado.api.Auth.AuthResponseAdmin;
 import superMercado.api.Auth.LoginRequest;
 import superMercado.api.Auth.RegisterRequest;
 import superMercado.api.entities.Administrador;
-import superMercado.api.services.Administrador.AdministradorService;
+import superMercado.api.excepciones.*;
+import superMercado.api.services.PersonaService.AdministradorService;
 
 @RestController
 //Dar permiso a los clientes
@@ -26,23 +26,35 @@ public class AdministradorController {
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
             return ResponseEntity.ok(administradorService.login(request));
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (InvalidCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al iniciar sesión.");
         }
-
-
-
     }
 
     @PostMapping(value = "/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         try {
             return ResponseEntity.ok(administradorService.register(request));
-        } catch (DataIntegrityViolationException e) {
-            // Devuelve el error específico en el cuerpo de la respuesta
+        } catch (UserNameAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        } catch (Exception e) {
+        } catch (EmailAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (DocumentAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (InvalidEmailFormatException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (PhoneAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (WeakPasswordException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Violación de integridad de datos.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar el administrador.");
         }
     }
 

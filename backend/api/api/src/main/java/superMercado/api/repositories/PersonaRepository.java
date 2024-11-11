@@ -12,4 +12,7 @@ import java.util.Optional;
 @NoRepositoryBean
 public interface PersonaRepository < E extends Persona, ID extends Serializable> extends JpaRepository<E, ID> {
     Optional<E> findByUsername(String username);
+    Optional<E> findByEmail(String email);
+    Optional<E> findByDocumento(String documento);
+    Optional<E> findByTelefono(String telefono);
 }

@@ -2,11 +2,8 @@ package superMercado.api.services.Sede;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import superMercado.api.entities.Administrador;
 import superMercado.api.entities.Sede;
-import superMercado.api.repositories.AdministradorRepository;
 import superMercado.api.repositories.SedeRepository;
-import superMercado.api.services.Administrador.BaseServiceAdministrador;
 
 import java.util.List;
 import java.util.Optional;

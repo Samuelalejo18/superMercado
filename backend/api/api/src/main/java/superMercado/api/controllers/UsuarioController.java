@@ -1,14 +1,15 @@
 package superMercado.api.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import superMercado.api.Auth.AuthResponseAdmin;
 import superMercado.api.Auth.LoginRequest;
 import superMercado.api.Auth.RegisterRequest;
 import superMercado.api.entities.Usuario;
-import superMercado.api.services.Usuario.UsuarioService;
+import superMercado.api.excepciones.*;
+import superMercado.api.services.PersonaService.UsuarioService;
 
 @RestController
 //Dar permiso a los clientes
@@ -25,18 +26,37 @@ public class UsuarioController {
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
             return ResponseEntity.ok(usuarioService.login(request));
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (InvalidCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al iniciar sesión.");
         }
-
-
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<AuthResponseAdmin> register(@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(usuarioService.register(request));
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+        try {
+            return ResponseEntity.ok(usuarioService.register(request));
+        } catch (UserNameAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (EmailAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (DocumentAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (InvalidEmailFormatException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (PhoneAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (WeakPasswordException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Violación de integridad de datos.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar el administrador.");
+        }
     }
-
 
     ///  ENDPOINT TRAER TODOS LOS usuarios
     @GetMapping("/getUsuarios")
