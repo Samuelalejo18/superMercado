@@ -9,11 +9,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequestAdmin {
+public class RegisterRequest {
+
+
     String username;
-    String nombre_administrador;
-    String contacto_administrador;
-    String numero_documento_admin;
-    String email;
     String password;
+    String nombre;
+    String email;
+    String documento;
+    String telefono;
 }

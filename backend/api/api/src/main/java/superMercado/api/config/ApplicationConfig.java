@@ -11,7 +11,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import superMercado.api.entities.Persona;
 import superMercado.api.repositories.AdministradorRepository;
+import superMercado.api.repositories.PersonaRepository;
 
 
 @Configuration
@@ -19,17 +21,16 @@ import superMercado.api.repositories.AdministradorRepository;
 public class ApplicationConfig {
 
     private final AdministradorRepository administradorRepository;
+   private   PersonaRepository<Persona, Integer> personaRepository;
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception
-    {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider()
-    {
-        DaoAuthenticationProvider authenticationProvider= new DaoAuthenticationProvider();
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailService());
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
@@ -41,9 +42,10 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailService() {
-        return username -> administradorRepository.findByUsername(username)
-                .orElseThrow(()-> new UsernameNotFoundException("User not fournd"));
+    public UserDetailsService userDetailService() throws UsernameNotFoundException {
+
+       return username -> administradorRepository.findByUsername(username)
+              .orElseThrow(() -> new UsernameNotFoundException("User not fournd"));
     }
 
 }

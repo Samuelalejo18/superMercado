@@ -3,15 +3,13 @@ package superMercado.api.services.Administrador;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import superMercado.api.Auth.AuthResponseAdmin;
-import superMercado.api.Auth.LoginRequestAdmin;
-import superMercado.api.Auth.RegisterRequestAdmin;
+import superMercado.api.Auth.LoginRequest;
+import superMercado.api.Auth.RegisterRequest;
 import superMercado.api.entities.Administrador;
 import superMercado.api.repositories.AdministradorRepository;
 import superMercado.api.services.jwt.JwtService;
@@ -29,7 +27,7 @@ public class AdministradorService implements BaseServiceAdministrador {
     @Autowired
     private final AuthenticationManager authenticationManager;
 
-    public AuthResponseAdmin login(LoginRequestAdmin request) {
+    public AuthResponseAdmin login(LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         UserDetails user=administradorRepository.findByUsername(request.getUsername()).orElseThrow();
         String token=jwtService.getToken(user);
@@ -41,16 +39,13 @@ public class AdministradorService implements BaseServiceAdministrador {
 
 
     @Override
-    public AuthResponseAdmin register(RegisterRequestAdmin request) {
-        Administrador administrador = Administrador.builder()
-                .username(request.getUsername())
-                .nombre_administrador(request.getNombre_administrador())
-                .contacto_administrador(request.getContacto_administrador())
-                .numero_documento_admin(request.getNumero_documento_admin())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))  // Asegúrate de que esto se esté haciendo correctamente
-                .build();
-
+    public AuthResponseAdmin register(RegisterRequest request) {
+        Administrador administrador =  new Administrador(request.getUsername(),
+                passwordEncoder.encode(request.getPassword()),
+                request.getNombre(),
+                request.getEmail(),
+                request.getDocumento(),
+                request.getTelefono());
         try {
             create(administrador);
             return AuthResponseAdmin.builder()
@@ -109,6 +104,7 @@ public class AdministradorService implements BaseServiceAdministrador {
         try {
             Optional<Administrador> entityOpcional = administradorRepository.findById(id);
             Administrador administrador = entityOpcional.get();
+            administrador.setPassword( passwordEncoder.encode(administrador.getPassword()));
             administrador = administradorRepository.save(entity);
             return administrador;
         } catch (Exception e) {

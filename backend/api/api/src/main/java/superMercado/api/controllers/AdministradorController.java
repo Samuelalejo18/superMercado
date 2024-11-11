@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import superMercado.api.Auth.AuthResponseAdmin;
-import superMercado.api.Auth.LoginRequestAdmin;
-import superMercado.api.Auth.RegisterRequestAdmin;
+import superMercado.api.Auth.LoginRequest;
+import superMercado.api.Auth.RegisterRequest;
 import superMercado.api.entities.Administrador;
 import superMercado.api.services.Administrador.AdministradorService;
 
@@ -22,7 +22,7 @@ public class AdministradorController {
 
     //endPoint login
     @PostMapping(value = "/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestAdmin request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
         return ResponseEntity.ok(administradorService.login(request));
 
@@ -30,7 +30,7 @@ public class AdministradorController {
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<AuthResponseAdmin> register(@RequestBody RegisterRequestAdmin request) {
+    public ResponseEntity<AuthResponseAdmin> register(@RequestBody RegisterRequest request) {
         return ResponseEntity.ok(administradorService.register(request));
     }
 

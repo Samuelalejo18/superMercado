@@ -18,32 +18,22 @@ import java.util.List;
 @Table(name = "administrador", uniqueConstraints = {@UniqueConstraint(columnNames = {"username", "contacto_administrador", "numero_documento_admin", "email"})})
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Getter
 @Setter
-public class Administrador implements UserDetails, Serializable {
+public class Administrador extends Persona  {
 
 
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Integer id_administrador;
-    @Column(nullable = false)
-    private String username;
-    @Column(nullable = false)
-    private String nombre_administrador;
-    @Column(nullable = false)
-    private String contacto_administrador;
-    @Column(nullable = false)
-    private String numero_documento_admin;
-    @Column(nullable = false)
-    private String email;
-    @Column(nullable = false)
-    private String password;
 
     public Administrador(Integer id_administrador) {
         this.id_administrador = id_administrador;
+    }
+
+    public Administrador(String username, String password, String nombre, String email, String documento, String telefono) {
+        super(username, password, nombre, email, documento, telefono);
     }
 
     @OneToMany(mappedBy = "administrador", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -63,7 +53,7 @@ public class Administrador implements UserDetails, Serializable {
         return password;
     }
 
-    @JsonIgnore
+
     @Override
     public String getUsername() {
         return username;

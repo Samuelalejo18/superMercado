@@ -7,6 +7,6 @@ import superMercado.api.entities.Administrador;
 import java.util.Optional;
 
 @Repository
-public interface AdministradorRepository extends JpaRepository<Administrador, Integer> {
-    Optional<Administrador> findByUsername(String username);
+public interface AdministradorRepository extends PersonaRepository<Administrador,Integer> {
+
 }

@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import superMercado.api.entities.Sede;
 import superMercado.api.entities.Usuario;
 
-public interface UsuarioRepository  extends JpaRepository<Usuario, Integer> {
+public interface UsuarioRepository  extends PersonaRepository<Usuario,Integer> {
 }

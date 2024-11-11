@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import superMercado.api.Auth.AuthResponseAdmin;
+import superMercado.api.Auth.LoginRequest;
+import superMercado.api.Auth.RegisterRequest;
 import superMercado.api.entities.Usuario;
 import superMercado.api.services.Usuario.UsuarioService;
 
@@ -15,6 +18,25 @@ public class UsuarioController {
     //Usuarios
     @Autowired
     private UsuarioService usuarioService;
+
+
+    //endPoint login
+    @PostMapping(value = "/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        try {
+            return ResponseEntity.ok(usuarioService.login(request));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+
+    }
+
+    @PostMapping(value = "/register")
+    public ResponseEntity<AuthResponseAdmin> register(@RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(usuarioService.register(request));
+    }
+
 
     ///  ENDPOINT TRAER TODOS LOS usuarios
     @GetMapping("/getUsuarios")
@@ -54,7 +76,7 @@ public class UsuarioController {
 
     //End point update-insert into
     @PutMapping("/{id}/actualizarUsuario")
-    public ResponseEntity<?> actualizarUsuario (@PathVariable int id,  @RequestBody Usuario usuario) {
+    public ResponseEntity<?> actualizarUsuario(@PathVariable int id, @RequestBody Usuario usuario) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(usuarioService.update(id, usuario));
         } catch (Exception e) {

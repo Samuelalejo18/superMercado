@@ -1,70 +1,65 @@
 package superMercado.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Entity
-@Table(name = "usuario")
-
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Usuario extends Persona {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_usuario;
+@MappedSuperclass
+public abstract class Persona implements UserDetails, Serializable {
 
-    public Usuario() {
-    }
 
-    public Usuario(String username, String password, String nombre, String email, String documento, String telefono) {
-        super(username, password, nombre, email, documento, telefono);
-    }
+    protected String username;
+    protected String password;
+    protected String nombre;
+    protected String email;
+    protected String documento;
+    protected String telefono;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties({"usuario", "proveedores"})
-    private List<Factura> facturas = new ArrayList<Factura>();
 
-    @JsonIgnore
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
-    }
+
     @JsonIgnore
     @Override
     public String getPassword() {
+
         return password;
     }
+
 
     @Override
     public String getUsername() {
         return username;
     }
+
     @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
+
     @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
+
     @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
     @JsonIgnore
     @Override
     public boolean isEnabled() {
