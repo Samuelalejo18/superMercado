@@ -11,52 +11,40 @@ import superMercado.api.entities.Usuario;
 import superMercado.api.excepciones.*;
 import superMercado.api.services.PersonaService.UsuarioService;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 //Dar permiso a los clientes
 @CrossOrigin(origins = "*")
-@RequestMapping(path = "api/user")
+@RequestMapping(path = "/user")
 public class UsuarioController {
     //Usuarios
     @Autowired
     private UsuarioService usuarioService;
 
+    /// path primer reporte
 
-    //endPoint login
-    @PostMapping(value = "/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        try {
-            return ResponseEntity.ok(usuarioService.login(request));
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (InvalidCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al iniciar sesión.");
-        }
+    //Primer reporte
+    /// Determinar un listado de los clientes con el código de la orden, el nombre de cada producto comprado,
+    //su fecha de compra, la cantidad, el valor unitario y el valor total
+
+
+    /*
+    SELECT nombre AS NOMBRE_USUARIO, producto_id AS ID_PRODUCTO, nombre_producto AS NOMBRE_PRODUCTO, fecha_factura AS FECHA_FACTURA, cantidad_productos AS CANTIDAD_PRODUCTO, precio_producto AS PRECIO_PRODUCTO, total_factura AS TOTAL
+    FROM usuario u
+    INNER JOIN factura f
+    ON u.id_usuario = f.id_usuario
+    INNER JOIN factura_producto fp
+    ON f.id_factura = fp.factura_id
+    INNER JOIN producto p
+    ON fp.producto_id = p.id_producto;
+     */
+    @GetMapping("/primerReporte/facturas-productos")
+    public List<Map<String, Object>> obtenerListadoDeFacturasConProductos() {
+        return usuarioService.obtenerListadoDeFacturasConProductos();
     }
 
-    @PostMapping(value = "/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        try {
-            return ResponseEntity.ok(usuarioService.register(request));
-        } catch (UserNameAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        } catch (EmailAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        } catch (DocumentAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        } catch (InvalidEmailFormatException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (PhoneAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (WeakPasswordException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Violación de integridad de datos.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar el administrador.");
-        }
-    }
 
     ///  ENDPOINT TRAER TODOS LOS usuarios
     @GetMapping("/getUsuarios")

@@ -16,6 +16,7 @@ import superMercado.api.repositories.UsuarioRepository;
 import superMercado.api.services.jwt.JwtService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -29,6 +30,32 @@ public class UsuarioService implements BaseServiceUsuario {
     private final PasswordEncoder passwordEncoder;
     @Autowired
     private final AuthenticationManager authenticationManager;
+
+
+    /// Primer reporte
+    ///  //Primer reporte
+    ///     ///Determinar un listado de los clientes con el código de la orden, el nombre de cada producto comprado,
+    ///     //su fecha de compra, la cantidad, el valor unitario y el valor total
+    /*
+    SELECT nombre AS NOMBRE_USUARIO,
+    producto_id AS ID_PRODUCTO,
+    nombre_producto AS NOMBRE_PRODUCTO,
+     fecha_factura AS FECHA_FACTURA,
+     cantidad_productos AS CANTIDAD_PRODUCTO,
+     precio_producto AS PRECIO_PRODUCTO,
+     total_factura AS TOTAL
+    FROM usuario u
+    INNER JOIN factura f
+    ON u.id_usuario = f.id_usuario
+    INNER JOIN factura_producto fp
+    ON f.id_factura = fp.factura_id
+    INNER JOIN producto p
+    ON fp.producto_id = p.id_producto;
+     */
+    public List<Map<String, Object>> obtenerListadoDeFacturasConProductos() {
+        return usuarioRepository.obtenerListadoDeFacturasConProductos();
+    }
+
 
     public AuthResponse login(LoginRequest request) throws InvalidCredentialsException {
         // Buscar el usuario por nombre de usuario

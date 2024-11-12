@@ -10,7 +10,7 @@ import superMercado.api.services.Factura.FacturaService;
 @RestController
 //Dar permiso a los clientes
 @CrossOrigin(origins = "*")
-@RequestMapping(path = "api/factura")
+@RequestMapping(path = "/factura")
 public class FacturaController {
     @Autowired
     private FacturaService facturaService;

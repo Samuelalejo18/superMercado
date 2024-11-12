@@ -15,48 +15,12 @@ import superMercado.api.services.PersonaService.AdministradorService;
 @RestController
 //Dar permiso a los clientes
 @CrossOrigin(origins = "*")
-@RequestMapping(path = "api/administrador")
+@RequestMapping(path = "/administrador")
 @RequiredArgsConstructor
 public class AdministradorController {
     @Autowired
     private final AdministradorService administradorService;
 
-    //endPoint login
-    @PostMapping(value = "/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        try {
-            return ResponseEntity.ok(administradorService.login(request));
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (InvalidCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al iniciar sesión.");
-        }
-    }
-
-    @PostMapping(value = "/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        try {
-            return ResponseEntity.ok(administradorService.register(request));
-        } catch (UserNameAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        } catch (EmailAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        } catch (DocumentAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        } catch (InvalidEmailFormatException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (PhoneAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (WeakPasswordException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Violación de integridad de datos.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar el administrador.");
-        }
-    }
 
     ///  ENDPOINT TRAER TODOS LOS ADMINISTRADORES
     @GetMapping("/getAdministradores")

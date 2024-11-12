@@ -21,7 +21,6 @@ public class Producto {
     private String nombre_producto;
     private double precio_producto;
     private String descripcion_producto;
-    private String categoria_producto;
     private String img_producto;
     @ManyToOne
     @JoinColumn(name = "id_lote") // Nombre de la columna en la tabla 'producto' que actúa como clave foránea

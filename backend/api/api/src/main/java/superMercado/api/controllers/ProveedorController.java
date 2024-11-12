@@ -10,7 +10,7 @@ import superMercado.api.services.Proveedor.ProveedorService;
 @RestController
 //Dar permiso a los clientes
 @CrossOrigin(origins = "*")
-@RequestMapping(path = "api/proveedor")
+@RequestMapping(path = "/proveedor")
 public class ProveedorController {
     @Autowired
     private ProveedorService proveedorService;

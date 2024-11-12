@@ -10,7 +10,7 @@ import superMercado.api.services.Lote.LoteService;
 @RestController
 //Dar permiso a los clientes
 @CrossOrigin(origins = "*")
-@RequestMapping(path = "api/lote")
+@RequestMapping(path = "/lote")
 public class LoteController {
     @Autowired
     private LoteService loteService;

@@ -11,7 +11,7 @@ import superMercado.api.services.Sede.SedeService;
 @RestController
 //Dar permiso a los clientes
 @CrossOrigin(origins = "*")
-@RequestMapping(path = "api/sede")
+@RequestMapping(path = "/sede")
 public class SedeController {
     @Autowired
     private SedeService sedeService;
