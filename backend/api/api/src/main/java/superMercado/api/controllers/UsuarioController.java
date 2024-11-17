@@ -17,7 +17,7 @@ import java.util.Map;
 @RestController
 //Dar permiso a los clientes
 @CrossOrigin(origins = "*")
-@RequestMapping(path = "/user")
+@RequestMapping(path = "api/user")
 public class UsuarioController {
     //Usuarios
     @Autowired
@@ -41,10 +41,18 @@ public class UsuarioController {
     ON fp.producto_id = p.id_producto;
      */
     @GetMapping("/primerReporte/facturas-productos")
-    public List<Map<String, Object>> obtenerListadoDeFacturasConProductos() {
-        return usuarioService.obtenerListadoDeFacturasConProductos();
-    }
+    public ResponseEntity<List<Map<String, Object>>> obtenerListadoDeFacturasConProductos() {
+        try {
+            // Llamada al servicio para obtener los datos
+            List<Map<String, Object>> reporte = usuarioService.obtenerListadoDeFacturasConProductos();
 
+            // Devuelve los datos con el código HTTP 200 (OK)
+            return ResponseEntity.ok(reporte);
+        } catch (Exception e) {
+            // Devuelve un error interno del servidor en caso de fallo
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
     ///  ENDPOINT TRAER TODOS LOS usuarios
     @GetMapping("/getUsuarios")

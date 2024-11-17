@@ -30,7 +30,7 @@ public interface UsuarioRepository extends PersonaRepository<Usuario, Integer> {
     ON fp.producto_id = p.id_producto;
      */
     @Query(value = "SELECT  u.nombre as nombre, " +
-            "p.id_producto AS ID_PRODUCTO, " +
+            "f.id_factura  AS id_factura , " +
             "p.nombre_producto AS NOMBRE_PRODUCTO, " +
             "f.fecha_factura AS FECHA_FACTURA, " +
             "fp.cantidad_productos AS CANTIDAD_PRODUCTO, " +

@@ -8,12 +8,25 @@ import superMercado.api.repositories.ProductoRepository;
 import superMercado.api.services.Producto.BaseServiceProducto;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class ProductoService implements BaseServiceProducto {
     @Autowired
     private ProductoRepository productoRepository;
+
+    //Listar los productos que no se han vendido
+    /*
+SELECT p.id_producto, p.nombre_producto, p.precio_producto
+FROM producto p
+LEFT JOIN factura_producto fp ON p.id_producto = fp.producto_id
+WHERE fp.factura_id IS NULL;
+
+    * */
+    public List<Map<String, Object>> obtenerProductosNoVendidos() {
+        return productoRepository.findProductosNoVendidos();
+    }
 
     @Override
 // GET-SELECT

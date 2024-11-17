@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import superMercado.api.entities.Producto;
 import superMercado.api.services.Producto.ProductoService;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 //Dar permiso a los clientes
 @CrossOrigin(origins = "*")
@@ -14,6 +17,27 @@ import superMercado.api.services.Producto.ProductoService;
 public class ProductoController {
     @Autowired
     private ProductoService productoService;
+
+    //Listar los productos que no se han vendido
+    /*
+SELECT p.id_producto, p.nombre_producto, p.precio_producto
+FROM producto p
+LEFT JOIN factura_producto fp ON p.id_producto = fp.producto_id
+WHERE fp.factura_id IS NULL;
+*/
+    @GetMapping("/segundoReporte/productosNoVendidos")
+    public ResponseEntity<List<Map<String, Object>>> productosNoVendidos() {
+        try {
+            // Llamada al servicio para obtener los datos
+            List<Map<String, Object>> reporte = productoService.obtenerProductosNoVendidos();
+
+            // Devuelve los datos con el código HTTP 200 (OK)
+            return ResponseEntity.ok(reporte);
+        } catch (Exception e) {
+            // Devuelve un error interno del servidor en caso de fallo
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
     ///  ENDPOINT TRAER TODOS LOS Productos
     @GetMapping("/getProductos")

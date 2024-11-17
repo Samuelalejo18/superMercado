@@ -12,6 +12,9 @@ import superMercado.api.entities.Administrador;
 import superMercado.api.excepciones.*;
 import superMercado.api.services.PersonaService.AdministradorService;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 //Dar permiso a los clientes
 @CrossOrigin(origins = "*")
@@ -20,6 +23,8 @@ import superMercado.api.services.PersonaService.AdministradorService;
 public class AdministradorController {
     @Autowired
     private final AdministradorService administradorService;
+
+
 
 
     ///  ENDPOINT TRAER TODOS LOS ADMINISTRADORES
