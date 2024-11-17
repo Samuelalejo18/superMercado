@@ -18,7 +18,7 @@ import java.util.Map;
 @RestController
 //Dar permiso a los clientes
 @CrossOrigin(origins = "*")
-@RequestMapping(path = "/administrador")
+@RequestMapping(path = "api/administrador")
 @RequiredArgsConstructor
 public class AdministradorController {
     @Autowired

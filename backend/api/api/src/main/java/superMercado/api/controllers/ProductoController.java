@@ -13,7 +13,7 @@ import java.util.Map;
 @RestController
 //Dar permiso a los clientes
 @CrossOrigin(origins = "*")
-@RequestMapping(path = "/producto")
+@RequestMapping(path = "api/producto")
 public class ProductoController {
     @Autowired
     private ProductoService productoService;
